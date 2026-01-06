@@ -29,10 +29,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // Upload to Vercel Blob
+    // Upload to Vercel Blob with proper content type
     const blob = await put(file.name, file, {
       access: "public",
       addRandomSuffix: true,
+      contentType: file.type || 'application/octet-stream',
     });
 
     return NextResponse.json({

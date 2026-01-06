@@ -79,7 +79,7 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
         {/* Image attachment with download button */}
         {isImage && message.fileUrl && (
           <div 
-            className="relative group"
+            className="relative group bg-muted/10"
             onMouseEnter={() => setShowImageActions(true)}
             onMouseLeave={() => setShowImageActions(false)}
           >
@@ -89,6 +89,24 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
               className="w-full h-auto max-h-96 object-cover cursor-pointer rounded-t-2xl"
               onClick={() => window.open(message.fileUrl!, '_blank')}
               loading="lazy"
+              onError={(e) => {
+                // Fallback if image fails to load
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+                const parent = target.parentElement;
+                if (parent) {
+                  const errorDiv = document.createElement('div');
+                  errorDiv.className = 'flex flex-col items-center justify-center p-8 text-muted-foreground';
+                  errorDiv.innerHTML = `
+                    <svg class="h-12 w-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <p class="text-sm">Image failed to load</p>
+                    <a href="${message.fileUrl}" target="_blank" class="text-xs text-primary hover:underline mt-2">Open in new tab</a>
+                  `;
+                  parent.appendChild(errorDiv);
+                }
+              }}
             />
             {showImageActions && (
               <div className="absolute top-2 right-2 flex gap-2">
