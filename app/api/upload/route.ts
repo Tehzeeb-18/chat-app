@@ -29,8 +29,12 @@ export async function POST(req: Request) {
       );
     }
 
+    // Convert file to buffer for proper upload
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
     // Upload to Vercel Blob with proper content type
-    const blob = await put(file.name, file, {
+    const blob = await put(file.name, buffer, {
       access: "public",
       addRandomSuffix: true,
       contentType: file.type || 'application/octet-stream',
