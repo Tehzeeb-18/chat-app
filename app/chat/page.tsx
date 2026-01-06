@@ -81,12 +81,18 @@ export default async function ChatPage() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar
-        conversations={formattedConversations}
-        currentUserId={session.user.id}
-      />
-      <EmptyState />
+    <div className="flex h-screen overflow-hidden bg-background">
+      {/* Mobile: Show only sidebar, Desktop: Show sidebar + empty state */}
+      <div className="w-full md:w-auto md:flex">
+        <Sidebar
+          conversations={formattedConversations}
+          currentUserId={session.user.id}
+        />
+      </div>
+      {/* Empty state - hidden on mobile, shown on desktop */}
+      <div className="hidden md:flex flex-1">
+        <EmptyState />
+      </div>
     </div>
   );
 }

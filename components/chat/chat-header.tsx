@@ -43,43 +43,43 @@ export function ChatHeader({ user, isOnline, isTyping, onVoiceCall, onVideoCall 
   };
 
   return (
-    <div className="h-16 border-b border-border bg-card px-4 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="relative">
-          <Avatar className="h-10 w-10">
+    <div className="h-14 md:h-16 border-b border-border bg-card px-3 md:px-4 flex items-center justify-between">
+      <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+        <div className="relative flex-shrink-0">
+          <Avatar className="h-9 w-9 md:h-10 md:w-10">
             <AvatarImage src={user.image || undefined} />
             <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
           </Avatar>
           {isOnline && (
-            <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-card" />
+            <div className="absolute bottom-0 right-0 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full bg-green-500 border-2 border-card" />
           )}
         </div>
-        <div>
-          <h2 className="font-semibold">{user.name || "Unknown User"}</h2>
-          <p className="text-xs text-muted-foreground">
+        <div className="min-w-0 flex-1">
+          <h2 className="font-semibold text-sm md:text-base truncate">{user.name || "Unknown User"}</h2>
+          <p className="text-xs text-muted-foreground truncate">
             {isTyping ? "typing..." : isOnline ? "online" : "offline"}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
         <Button
           variant="ghost"
           size="icon"
           onClick={onVoiceCall}
           title="Voice call"
-          className="hover:bg-accent"
+          className="hover:bg-accent h-8 w-8 md:h-10 md:w-10"
         >
-          <Phone className="h-5 w-5" />
+          <Phone className="h-4 w-4 md:h-5 md:w-5" />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           onClick={onVideoCall}
           title="Video call"
-          className="hover:bg-accent"
+          className="hover:bg-accent h-8 w-8 md:h-10 md:w-10"
         >
-          <Video className="h-5 w-5" />
+          <Video className="h-4 w-4 md:h-5 md:w-5" />
         </Button>
         
         {/* More options menu */}
@@ -87,10 +87,10 @@ export function ChatHeader({ user, isOnline, isTyping, onVoiceCall, onVideoCall 
           <Button 
             variant="ghost" 
             size="icon" 
-            className="hover:bg-accent"
+            className="hover:bg-accent h-8 w-8 md:h-10 md:w-10"
             onClick={() => setShowMenu(!showMenu)}
           >
-            <MoreVertical className="h-5 w-5" />
+            <MoreVertical className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
 
           <AnimatePresence>

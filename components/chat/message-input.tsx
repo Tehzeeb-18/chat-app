@@ -127,14 +127,14 @@ export function MessageInput({
   };
 
   return (
-    <div className="border-t border-border bg-card p-4">
+    <div className="border-t border-border bg-card p-3 md:p-4">
       {/* File Preview */}
       {selectedFile && (
         <div className="mb-2 p-2 bg-muted rounded-lg flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             {getFileIcon(selectedFile)}
-            <span className="text-sm truncate max-w-xs">{selectedFile.name}</span>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs md:text-sm truncate">{selectedFile.name}</span>
+            <span className="text-xs text-muted-foreground flex-shrink-0">
               ({(selectedFile.size / 1024).toFixed(1)} KB)
             </span>
           </div>
@@ -143,23 +143,24 @@ export function MessageInput({
             variant="ghost"
             size="icon"
             onClick={() => setSelectedFile(null)}
-            className="h-6 w-6"
+            className="h-6 w-6 flex-shrink-0"
           >
             <X className="h-4 w-4" />
           </Button>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="flex items-center gap-2">
+      <form onSubmit={handleSubmit} className="flex items-center gap-1 md:gap-2">
         {/* Plus button with file menu */}
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <Button
             type="button"
             variant="ghost"
             size="icon"
             onClick={() => setShowFileMenu(!showFileMenu)}
+            className="h-9 w-9 md:h-10 md:w-10"
           >
-            <Plus className="h-5 w-5" />
+            <Plus className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
 
           <AnimatePresence>
@@ -229,14 +230,15 @@ export function MessageInput({
         />
 
         {/* Emoji button */}
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <Button
             type="button"
             variant="ghost"
             size="icon"
             onClick={() => setShowEmoji(!showEmoji)}
+            className="h-9 w-9 md:h-10 md:w-10"
           >
-            <Smile className="h-5 w-5" />
+            <Smile className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
 
           <AnimatePresence>
@@ -245,15 +247,15 @@ export function MessageInput({
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute bottom-full left-0 mb-2 p-3 bg-popover border border-border rounded-xl shadow-2xl grid grid-cols-6 gap-2 max-h-64 overflow-y-auto"
-                style={{ width: '280px' }}
+                className="absolute bottom-full left-0 mb-2 p-2 md:p-3 bg-popover border border-border rounded-xl shadow-2xl grid grid-cols-5 md:grid-cols-6 gap-1 md:gap-2 max-h-64 overflow-y-auto"
+                style={{ width: '240px', maxWidth: '90vw' }}
               >
                 {EMOJI_LIST.map((emoji) => (
                   <button
                     key={emoji}
                     type="button"
                     onClick={() => handleEmojiClick(emoji)}
-                    className="text-3xl hover:bg-accent rounded-lg p-2 transition-all hover:scale-110 active:scale-95"
+                    className="text-2xl md:text-3xl hover:bg-accent rounded-lg p-1 md:p-2 transition-all hover:scale-110 active:scale-95"
                   >
                     {emoji}
                   </button>
@@ -269,7 +271,7 @@ export function MessageInput({
           onChange={handleInputChange}
           placeholder={selectedFile ? "Add a caption..." : "Type a message..."}
           disabled={disabled || isUploading}
-          className="flex-1"
+          className="flex-1 text-sm md:text-base"
           autoComplete="off"
         />
 
@@ -277,6 +279,7 @@ export function MessageInput({
           type="submit"
           size="icon"
           disabled={(!message.trim() && !selectedFile) || disabled || isUploading}
+          className="h-9 w-9 md:h-10 md:w-10 flex-shrink-0"
           className="shrink-0"
         >
           <Send className="h-5 w-5" />

@@ -55,13 +55,13 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "flex w-full mb-4 gap-2",
+        "flex w-full mb-3 md:mb-4 gap-2",
         isSent ? "justify-end" : "justify-start"
       )}
     >
       {/* Profile picture for received messages (left side) */}
       {!isSent && (
-        <Avatar className="h-8 w-8 mt-1 flex-shrink-0">
+        <Avatar className="h-7 w-7 md:h-8 md:w-8 mt-1 flex-shrink-0">
           <AvatarImage src={user?.image || undefined} />
           <AvatarFallback className="text-xs">
             {getInitials(user?.name || null)}
@@ -71,7 +71,7 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
 
       <div
         className={cn(
-          "max-w-[70%] rounded-2xl shadow-md overflow-hidden",
+          "max-w-[85%] sm:max-w-[75%] md:max-w-[70%] rounded-2xl shadow-md overflow-hidden",
           isSent
             ? "bg-primary text-primary-foreground rounded-br-sm"
             : "bg-card border border-border text-foreground rounded-bl-sm"
