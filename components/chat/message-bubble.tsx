@@ -7,7 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import type { Message } from "@/types";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { useState } from "react";
 
 interface MessageBubbleProps {
@@ -84,13 +83,12 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
             onMouseEnter={() => setShowImageActions(true)}
             onMouseLeave={() => setShowImageActions(false)}
           >
-            <Image
+            <img
               src={message.fileUrl}
               alt={message.fileName || "Image"}
-              width={400}
-              height={300}
-              className="w-full h-auto max-h-96 object-cover cursor-pointer"
+              className="w-full h-auto max-h-96 object-cover cursor-pointer rounded-t-2xl"
               onClick={() => window.open(message.fileUrl!, '_blank')}
+              loading="lazy"
             />
             {showImageActions && (
               <div className="absolute top-2 right-2 flex gap-2">
@@ -98,7 +96,10 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
                   size="icon"
                   variant="secondary"
                   className="h-8 w-8 rounded-full shadow-lg"
-                  onClick={() => handleDownload(message.fileUrl!, message.fileName || 'image.jpg')}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDownload(message.fileUrl!, message.fileName || 'image.jpg');
+                  }}
                 >
                   <Download className="h-4 w-4" />
                 </Button>
