@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Phone, Video, MoreVertical, Ban, Flag, X } from "lucide-react";
+import { Phone, Video, MoreVertical, Ban, Flag, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import type { User } from "@/types";
 
 interface ChatHeaderProps {
@@ -17,6 +18,7 @@ interface ChatHeaderProps {
 
 export function ChatHeader({ user, isOnline, isTyping, onVoiceCall, onVideoCall }: ChatHeaderProps) {
   const [showMenu, setShowMenu] = useState(false);
+  const router = useRouter();
 
   const getInitials = (name: string | null) => {
     if (!name) return "U";
@@ -43,8 +45,18 @@ export function ChatHeader({ user, isOnline, isTyping, onVoiceCall, onVideoCall 
   };
 
   return (
-    <div className="h-14 md:h-16 border-b border-border bg-card px-3 md:px-4 flex items-center justify-between">
+    <div className="h-14 md:h-16 border-b border-border bg-card px-2 md:px-4 flex items-center justify-between">
       <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+        {/* Mobile back button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.push("/chat")}
+          className="md:hidden h-9 w-9 flex-shrink-0"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+        
         <div className="relative flex-shrink-0">
           <Avatar className="h-9 w-9 md:h-10 md:w-10">
             <AvatarImage src={user.image || undefined} />

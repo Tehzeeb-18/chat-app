@@ -55,15 +55,15 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-3 md:p-4">
       <div className="w-full max-w-md">
-        <div className="bg-card rounded-2xl shadow-2xl p-8 border border-border">
-          <div className="flex flex-col items-center mb-8">
-            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-              <MessageSquare className="h-8 w-8 text-primary" />
+        <div className="bg-card rounded-2xl shadow-2xl p-6 md:p-8 border border-border">
+          <div className="flex flex-col items-center mb-6 md:mb-8">
+            <div className="h-14 w-14 md:h-16 md:w-16 rounded-full bg-primary/10 flex items-center justify-center mb-3 md:mb-4">
+              <MessageSquare className="h-7 w-7 md:h-8 md:w-8 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold">Create Account</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="text-2xl md:text-3xl font-bold">Create Account</h1>
+            <p className="text-muted-foreground mt-2 text-sm md:text-base text-center">
               Sign up to start chatting
             </p>
           </div>
