@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { ChatHeader } from "@/components/chat/chat-header";
@@ -28,7 +28,7 @@ export default function ConversationPage() {
     scrollToBottom();
   }, [messages]);
 
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     try {
       const messagesRes = await fetch(`/api/messages/${conversationId}`);
       if (messagesRes.ok) {
@@ -50,7 +50,7 @@ export default function ConversationPage() {
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
-  };
+  }, [conversationId, session?.user?.id]);
 
   useEffect(() => {
     if (!conversationId || !session?.user?.id) return;
@@ -88,7 +88,7 @@ export default function ConversationPage() {
     const interval = setInterval(fetchMessages, 2000);
 
     return () => clearInterval(interval);
-  }, [conversationId, session?.user?.id]);
+  }, [conversationId, session?.user?.id, fetchMessages]);
 
   const handleSendMessage = async (content: string, fileData?: { url: string; type: string; name: string; size: number }) => {
     if (!session?.user?.id || !otherUser) return;
