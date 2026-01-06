@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { put } from "@vercel/blob";
 
 export const dynamic = 'force-dynamic';
 
@@ -20,28 +19,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    // Validate file size (max 10MB)
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    // Validate file size (max 5MB for base64)
+    const maxSize = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSize) {
       return NextResponse.json(
-        { error: "File too large. Max size is 10MB" },
+        { error: "File too large. Max size is 5MB" },
         { status: 400 }
       );
     }
 
-    // Convert file to buffer for proper upload
+    // Convert to base64 for direct storage
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-
-    // Upload to Vercel Blob with proper content type
-    const blob = await put(file.name, buffer, {
-      access: "public",
-      addRandomSuffix: true,
-      contentType: file.type || 'application/octet-stream',
-    });
+    const base64 = buffer.toString('base64');
+    const dataUrl = `data:${file.type};base64,${base64}`;
 
     return NextResponse.json({
-      url: blob.url,
+      url: dataUrl,
       filename: file.name,
       size: file.size,
       mimeType: file.type,
