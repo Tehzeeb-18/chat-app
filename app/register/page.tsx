@@ -37,7 +37,12 @@ export default function RegisterPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        setError(result.error || "Something went wrong");
+        // Show detailed error for debugging
+        const errorMsg = result.details 
+          ? `${result.error}: ${result.details}` 
+          : result.error || "Something went wrong";
+        setError(errorMsg);
+        console.error("Registration failed:", result);
         return;
       }
 
