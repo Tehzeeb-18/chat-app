@@ -1,11 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
-// Force this page to never be cached - Updated Jan 12, 2026
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";

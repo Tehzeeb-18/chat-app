@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
-// Force this page to never be cached
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+import { useRouter } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
