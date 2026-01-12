@@ -128,7 +128,6 @@ export default function LoginPage() {
               Sign up
             </Link>
           </div>
-          {/* Forgot password and account management features available */}
         </div>
       </div>
     </div>
