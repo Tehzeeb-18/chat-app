@@ -45,11 +45,19 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
   };
 
   // Get the correct user for the avatar
-  // For sent messages, show sender's avatar (current user)
-  // For received messages, show sender's avatar (other user who sent it)
+  // message.sender is always the person who sent this specific message
   const avatarUser = message.sender;
   const isImage = message.type === "image" || message.fileMimeType?.startsWith("image/");
   const isFile = message.type === "file" || (message.fileUrl && !isImage);
+
+  // Debug: Log avatar info
+  console.log('Message bubble:', {
+    isSent,
+    senderName: message.sender?.name,
+    senderImage: message.sender?.image?.substring(0, 50),
+    receiverName: message.receiver?.name,
+    receiverImage: message.receiver?.image?.substring(0, 50),
+  });
 
   return (
     <motion.div
