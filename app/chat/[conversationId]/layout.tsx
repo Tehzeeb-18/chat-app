@@ -1,7 +1,10 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Sidebar } from "@/components/chat/sidebar";
+import { SidebarWrapper } from "@/components/chat/sidebar-wrapper";
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function ConversationLayout({
   children,
@@ -89,8 +92,8 @@ export default async function ConversationLayout({
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Sidebar - ONLY on desktop, NEVER on mobile */}
       <div className="hidden md:flex flex-shrink-0">
-        <Sidebar
-          conversations={formattedConversations}
+        <SidebarWrapper
+          initialConversations={formattedConversations}
           currentUserId={session.user.id}
           activeConversationId={params.conversationId}
         />

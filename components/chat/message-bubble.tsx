@@ -44,7 +44,10 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
     }
   };
 
-  const user = isSent ? message.sender : message.receiver;
+  // Get the correct user for the avatar
+  // For sent messages, show sender's avatar (current user)
+  // For received messages, show sender's avatar (other user who sent it)
+  const avatarUser = message.sender;
   const isImage = message.type === "image" || message.fileMimeType?.startsWith("image/");
   const isFile = message.type === "file" || (message.fileUrl && !isImage);
 
@@ -61,9 +64,9 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
       {/* Profile picture for received messages */}
       {!isSent && (
         <Avatar className="h-8 w-8 mt-1 flex-shrink-0">
-          <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
+          <AvatarImage src={avatarUser?.image || undefined} alt={avatarUser?.name || "User"} />
           <AvatarFallback className="text-xs">
-            {getInitials(user?.name || null)}
+            {getInitials(avatarUser?.name || null)}
           </AvatarFallback>
         </Avatar>
       )}
@@ -188,9 +191,9 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
       {/* Profile picture for sent messages */}
       {isSent && (
         <Avatar className="h-8 w-8 mt-1 flex-shrink-0">
-          <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
+          <AvatarImage src={avatarUser?.image || undefined} alt={avatarUser?.name || "User"} />
           <AvatarFallback className="text-xs">
-            {getInitials(user?.name || null)}
+            {getInitials(avatarUser?.name || null)}
           </AvatarFallback>
         </Avatar>
       )}

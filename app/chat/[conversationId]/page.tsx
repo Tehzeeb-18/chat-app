@@ -50,16 +50,16 @@ export default function ConversationPage() {
         const messagesData = await messagesRes.json();
         setMessages(messagesData);
         
-        // Mark messages as read
+        // Mark messages as read immediately when viewing conversation
         const unreadMessages = messagesData.filter(
           (msg: Message) => !msg.read && msg.receiverId === session?.user?.id
         );
         
         if (unreadMessages.length > 0) {
-          // Mark as read in background
-          fetch(`/api/messages/${conversationId}/read`, {
+          // Mark as read immediately
+          await fetch(`/api/messages/${conversationId}/read`, {
             method: 'POST',
-          }).catch(console.error);
+          });
         }
       }
     } catch (error) {
@@ -99,8 +99,8 @@ export default function ConversationPage() {
 
     fetchData();
 
-    // Poll for new messages every 3 seconds (reduced frequency for better performance)
-    const interval = setInterval(fetchMessages, 3000);
+    // Poll for new messages every 5 seconds (increased from 3 for better performance)
+    const interval = setInterval(fetchMessages, 5000);
 
     return () => clearInterval(interval);
   }, [conversationId, session?.user?.id, fetchMessages]);
