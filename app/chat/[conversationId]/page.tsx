@@ -17,11 +17,26 @@ export default function ConversationPage() {
   const [otherUser, setOtherUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeCall, setActiveCall] = useState<"voice" | "video" | null>(null);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const conversationId = params.conversationId as string;
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (!isUserScrolling) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  // Detect when user is scrolling up to read old messages
+  const handleScroll = () => {
+    if (!messagesContainerRef.current) return;
+    
+    const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
+    const isAtBottom = scrollHeight - scrollTop - clientHeight < 100;
+    
+    // If user is near bottom, allow auto-scroll. Otherwise, they're reading old messages
+    setIsUserScrolling(!isAtBottom);
   };
 
   useEffect(() => {
@@ -182,7 +197,11 @@ export default function ConversationPage() {
         onVideoCall={handleVideoCall}
       />
 
-      <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 bg-background">
+      <div 
+        ref={messagesContainerRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-y-auto overflow-x-hidden p-4 bg-background"
+      >
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-sm text-muted-foreground text-center">
