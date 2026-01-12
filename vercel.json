@@ -1,16 +1,5 @@
 {
   "buildCommand": "prisma generate && next build",
   "framework": "nextjs",
-  "installCommand": "npm install",
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    }
-  ]
+  "installCommand": "npm install"
 }

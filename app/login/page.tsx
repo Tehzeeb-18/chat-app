@@ -5,8 +5,6 @@ import { useState } from "react";
 // Force this page to never be cached - Updated Jan 12, 2026
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-export const fetchCache = 'force-no-store';
-export const runtime = 'nodejs';
 
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
