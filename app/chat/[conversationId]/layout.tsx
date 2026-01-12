@@ -86,9 +86,9 @@ export default async function ConversationLayout({
   );
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
       {/* Sidebar - ONLY on desktop, NEVER on mobile */}
-      <div className="hidden md:flex">
+      <div className="hidden md:flex flex-shrink-0">
         <Sidebar
           conversations={formattedConversations}
           currentUserId={session.user.id}
@@ -96,7 +96,7 @@ export default async function ConversationLayout({
         />
       </div>
       {/* Chat area - full screen on mobile */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {children}
       </div>
     </div>

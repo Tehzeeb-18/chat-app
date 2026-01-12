@@ -45,8 +45,8 @@ export function ChatHeader({ user, isOnline, isTyping, onVoiceCall, onVideoCall 
   };
 
   return (
-    <div className="h-16 border-b border-border bg-card px-4 flex items-center justify-between">
-      <div className="flex items-center gap-3 min-w-0 flex-1">
+    <div className="h-16 border-b border-border bg-card px-4 flex items-center justify-between flex-shrink-0">
+      <div className="flex items-center gap-3 min-w-0 flex-1 overflow-hidden">
         {/* Mobile back button */}
         <Button
           variant="ghost"
@@ -64,9 +64,9 @@ export function ChatHeader({ user, isOnline, isTyping, onVoiceCall, onVideoCall 
           </AvatarFallback>
         </Avatar>
         
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 overflow-hidden">
           <h2 className="font-semibold text-base truncate">{user.name || "Unknown User"}</h2>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground truncate">
             {isTyping ? "typing..." : isOnline ? "online" : "offline"}
           </p>
         </div>

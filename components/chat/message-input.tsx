@@ -127,10 +127,10 @@ export function MessageInput({
   };
 
   return (
-    <div className="border-t border-border bg-card p-4">
+    <div className="border-t border-border bg-card p-4 flex-shrink-0">
       {selectedFile && (
         <div className="mb-3 p-2 bg-muted rounded-lg flex items-center justify-between">
-          <div className="flex items-center gap-2 flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-1 min-w-0 overflow-hidden">
             {getFileIcon(selectedFile)}
             <span className="text-sm truncate">{selectedFile.name}</span>
           </div>
@@ -146,7 +146,7 @@ export function MessageInput({
       )}
 
       <form onSubmit={handleSubmit} className="flex items-center gap-2">
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <Button
             type="button"
             variant="ghost"
@@ -222,7 +222,7 @@ export function MessageInput({
           accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx,.zip,.rar"
         />
 
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <Button
             type="button"
             variant="ghost"
@@ -262,13 +262,14 @@ export function MessageInput({
           onChange={handleInputChange}
           placeholder="Type a message..."
           disabled={disabled || isUploading}
-          className="flex-1"
+          className="flex-1 min-w-0"
           autoComplete="off"
         />
 
         <Button
           type="submit"
           disabled={(!message.trim() && !selectedFile) || disabled || isUploading}
+          className="flex-shrink-0"
         >
           <Send className="h-5 w-5" />
         </Button>
