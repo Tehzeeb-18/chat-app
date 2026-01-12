@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
+// Force this page to never be cached
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
