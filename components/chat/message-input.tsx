@@ -62,9 +62,10 @@ export function MessageInput({
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validate file size (max 10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        alert("File too large. Max size is 10MB");
+      // Validate file size (max 5MB for mobile compatibility)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File too large. Max size is 5MB");
+        e.target.value = ""; // Reset input
         return;
       }
       setSelectedFile(file);
@@ -74,6 +75,9 @@ export function MessageInput({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prevent double submission
+    if (isUploading) return;
     
     if (selectedFile) {
       // Upload file first
@@ -97,10 +101,13 @@ export function MessageInput({
           });
           setSelectedFile(null);
           setMessage("");
+        } else {
+          const error = await response.json();
+          alert(error.error || "Failed to upload file");
         }
       } catch (error) {
         console.error("Error uploading file:", error);
-        alert("Failed to upload file");
+        alert("Failed to upload file. Please try again.");
       } finally {
         setIsUploading(false);
       }
@@ -130,15 +137,21 @@ export function MessageInput({
     <div className="border-t border-border bg-card p-4 flex-shrink-0">
       {selectedFile && (
         <div className="mb-3 p-2 bg-muted rounded-lg flex items-center justify-between">
-          <div className="flex items-center gap-2 flex-1 min-w-0 overflow-hidden">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
             {getFileIcon(selectedFile)}
-            <span className="text-sm truncate">{selectedFile.name}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm truncate">{selectedFile.name}</p>
+              <p className="text-xs text-muted-foreground">
+                {(selectedFile.size / 1024).toFixed(1)} KB
+              </p>
+            </div>
           </div>
           <Button
             type="button"
             variant="ghost"
             size="icon"
             onClick={() => setSelectedFile(null)}
+            className="flex-shrink-0"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -269,9 +282,13 @@ export function MessageInput({
         <Button
           type="submit"
           disabled={(!message.trim() && !selectedFile) || disabled || isUploading}
-          className="flex-shrink-0"
+          className="flex-shrink-0 h-10 w-10 p-0"
         >
-          <Send className="h-5 w-5" />
+          {isUploading ? (
+            <div className="h-4 w-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <Send className="h-5 w-5" />
+          )}
         </Button>
       </form>
     </div>
