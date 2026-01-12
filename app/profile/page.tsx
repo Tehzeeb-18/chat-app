@@ -17,6 +17,9 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState("");
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -197,6 +200,95 @@ export default function ProfilePage() {
               )}
             </Button>
           </form>
+
+          {/* Delete Account Section */}
+          <div className="mt-8 pt-8 border-t border-destructive/20">
+            <h3 className="text-lg font-semibold text-destructive mb-2">
+              Danger Zone
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Once you delete your account, there is no going back. All your messages and data will be permanently deleted.
+            </p>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => setShowDeleteDialog(true)}
+              className="w-full"
+            >
+              Delete Account
+            </Button>
+          </div>
+
+          {/* Delete Confirmation Dialog */}
+          {showDeleteDialog && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+              <div className="bg-card border rounded-xl p-6 max-w-md w-full">
+                <h3 className="text-xl font-bold text-destructive mb-2">
+                  Delete Account
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  This action cannot be undone. Please enter your password to confirm.
+                </p>
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  className="mb-4"
+                />
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowDeleteDialog(false);
+                      setDeletePassword("");
+                    }}
+                    className="flex-1"
+                    disabled={isDeleting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={async () => {
+                      if (!deletePassword) {
+                        setMessage("Please enter your password");
+                        return;
+                      }
+                      
+                      setIsDeleting(true);
+                      try {
+                        const response = await fetch("/api/auth/delete-account", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ password: deletePassword }),
+                        });
+
+                        if (response.ok) {
+                          alert("Account deleted successfully");
+                          router.push("/login");
+                        } else {
+                          const data = await response.json();
+                          setMessage(data.error || "Failed to delete account");
+                          setShowDeleteDialog(false);
+                        }
+                      } catch (error) {
+                        setMessage("An error occurred");
+                        setShowDeleteDialog(false);
+                      } finally {
+                        setIsDeleting(false);
+                        setDeletePassword("");
+                      }
+                    }}
+                    className="flex-1"
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Deleting..." : "Delete Forever"}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
