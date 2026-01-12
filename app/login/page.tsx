@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 
-// Force this page to never be cached
+// Force this page to never be cached - Updated Jan 12, 2026
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+export const runtime = 'nodejs';
+
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -57,6 +60,11 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-3 md:p-4">
       <div className="w-full max-w-md">
         <div className="bg-card rounded-2xl shadow-2xl p-6 md:p-8 border border-border">
+          {/* Version indicator - remove after confirming deployment */}
+          <div className="text-xs text-center text-muted-foreground mb-2 opacity-50">
+            v2.0 - Updated: Jan 12, 2026
+          </div>
+          
           <div className="flex flex-col items-center mb-6 md:mb-8">
             <div className="h-14 w-14 md:h-16 md:w-16 rounded-full bg-primary/10 flex items-center justify-center mb-3 md:mb-4">
               <MessageSquare className="h-7 w-7 md:h-8 md:w-8 text-primary" />
