@@ -1,0 +1,8 @@
+Version: 2.0
+Build Date: January 12, 2026
+Commit: 3ccff05
+Features: Forgot Password, Reset Password, Delete Account
+Status: DEPLOYED
+
+If you can see this file, the deployment is working.
+Check: https://chat-app-ollq.vercel.app/version.txt
