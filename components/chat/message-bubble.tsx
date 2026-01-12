@@ -54,14 +54,14 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "flex w-full mb-3 md:mb-4 gap-2",
+        "flex mb-4 gap-2",
         isSent ? "justify-end" : "justify-start"
       )}
     >
-      {/* Profile picture for received messages (left side) */}
+      {/* Profile picture for received messages */}
       {!isSent && (
-        <Avatar className="h-7 w-7 md:h-8 md:w-8 mt-1 flex-shrink-0">
-          <AvatarImage src={user?.image || undefined} />
+        <Avatar className="h-8 w-8 mt-1 flex-shrink-0">
+          <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
           <AvatarFallback className="text-xs">
             {getInitials(user?.name || null)}
           </AvatarFallback>
@@ -70,70 +70,75 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
 
       <div
         className={cn(
-          "max-w-[85%] sm:max-w-[75%] md:max-w-[70%] rounded-2xl shadow-md overflow-hidden",
+          "max-w-[70%] rounded-2xl shadow-sm",
           isSent
-            ? "bg-primary text-primary-foreground rounded-br-sm"
-            : "bg-card border border-border text-foreground rounded-bl-sm"
+            ? "bg-primary text-primary-foreground"
+            : "bg-card border border-border"
         )}
       >
         {/* Image attachment with download button */}
         {isImage && message.fileUrl && (
-          <div 
-            className="relative group bg-muted/10"
-            onMouseEnter={() => setShowImageActions(true)}
-            onMouseLeave={() => setShowImageActions(false)}
-          >
+          <div className="relative group bg-muted/10 min-h-[120px] max-w-full">
             <img
               src={message.fileUrl}
               alt={message.fileName || "Image"}
-              className="w-full h-auto max-h-96 object-cover cursor-pointer rounded-t-2xl"
-              onClick={() => window.open(message.fileUrl!, '_blank')}
+              className="w-full h-auto max-h-[300px] object-contain cursor-pointer"
+              onClick={() => {
+                const newWindow = window.open();
+                if (newWindow) {
+                  newWindow.document.write(`
+                    <html>
+                      <head><title>${message.fileName || 'Image'}</title></head>
+                      <body style="margin:0;display:flex;justify-content:center;align-items:center;background:#000;">
+                        <img src="${message.fileUrl}" style="max-width:100%;max-height:100vh;object-fit:contain;" />
+                      </body>
+                    </html>
+                  `);
+                }
+              }}
               loading="lazy"
               onError={(e) => {
-                // Fallback if image fails to load
+                console.error('Image failed to load');
                 const target = e.target as HTMLImageElement;
                 target.style.display = 'none';
                 const parent = target.parentElement;
-                if (parent) {
+                if (parent && !parent.querySelector('.error-message')) {
                   const errorDiv = document.createElement('div');
-                  errorDiv.className = 'flex flex-col items-center justify-center p-8 text-muted-foreground';
+                  errorDiv.className = 'error-message flex flex-col items-center justify-center p-6 text-muted-foreground';
                   errorDiv.innerHTML = `
-                    <svg class="h-12 w-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="h-10 w-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <p class="text-sm">Image failed to load</p>
-                    <a href="${message.fileUrl}" target="_blank" class="text-xs text-primary hover:underline mt-2">Open in new tab</a>
+                    <p class="text-xs">Image not available</p>
                   `;
                   parent.appendChild(errorDiv);
                 }
               }}
             />
-            {showImageActions && (
-              <div className="absolute top-2 right-2 flex gap-2">
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-8 w-8 rounded-full shadow-lg"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDownload(message.fileUrl!, message.fileName || 'image.jpg');
-                  }}
-                >
-                  <Download className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
+            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <Button
+                size="icon"
+                variant="secondary"
+                className="h-7 w-7 rounded-full shadow-lg"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDownload(message.fileUrl!, message.fileName || 'image.jpg');
+                }}
+              >
+                <Download className="h-3.5 w-3.5" />
+              </Button>
+            </div>
           </div>
         )}
 
         {/* File attachment */}
         {isFile && message.fileUrl && (
-          <div className="flex items-center gap-3 p-3">
-            <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
-              <FileText className="h-5 w-5" />
+          <div className="flex items-center gap-2 p-2.5">
+            <div className="h-9 w-9 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+              <FileText className="h-4.5 w-4.5" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{message.fileName}</p>
+              <p className="text-xs font-medium truncate">{message.fileName}</p>
               <p className="text-xs opacity-70">
                 {message.fileSize ? `${(message.fileSize / 1024).toFixed(1)} KB` : "File"}
               </p>
@@ -141,18 +146,18 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
             <Button
               size="icon"
               variant="ghost"
-              className="h-8 w-8 flex-shrink-0"
+              className="h-7 w-7 flex-shrink-0"
               onClick={() => handleDownload(message.fileUrl!, message.fileName || 'file')}
             >
-              <Download className="h-4 w-4" />
+              <Download className="h-3.5 w-3.5" />
             </Button>
           </div>
         )}
 
         {/* Text content */}
         {message.content && (
-          <div className="px-4 py-2">
-            <p className="text-sm break-words whitespace-pre-wrap leading-relaxed" style={{ fontSize: '15px' }}>
+          <div className="px-3 py-2">
+            <p className="text-sm break-words whitespace-pre-wrap leading-relaxed">
               {message.content}
             </p>
           </div>
@@ -161,7 +166,7 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
         {/* Timestamp and read receipts */}
         <div
           className={cn(
-            "flex items-center gap-1 px-4 pb-2 text-xs",
+            "flex items-center gap-1 px-3 pb-1.5 text-xs",
             isSent ? "text-primary-foreground/70 justify-end" : "text-muted-foreground"
           )}
         >
@@ -169,21 +174,21 @@ export function MessageBubble({ message, isSent }: MessageBubbleProps) {
           {isSent && (
             <span className="ml-1 flex items-center">
               {message.read ? (
-                <CheckCheck className="h-4 w-4 text-blue-400" strokeWidth={2.5} />
+                <CheckCheck className="h-3.5 w-3.5 text-blue-400" strokeWidth={2.5} />
               ) : message.delivered ? (
-                <CheckCheck className="h-4 w-4" strokeWidth={2.5} />
+                <CheckCheck className="h-3.5 w-3.5" strokeWidth={2.5} />
               ) : (
-                <Check className="h-4 w-4" strokeWidth={2.5} />
+                <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
               )}
             </span>
           )}
         </div>
       </div>
 
-      {/* Profile picture for sent messages (right side) */}
+      {/* Profile picture for sent messages */}
       {isSent && (
         <Avatar className="h-8 w-8 mt-1 flex-shrink-0">
-          <AvatarImage src={user?.image || undefined} />
+          <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
           <AvatarFallback className="text-xs">
             {getInitials(user?.name || null)}
           </AvatarFallback>

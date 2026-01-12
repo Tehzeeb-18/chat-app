@@ -171,8 +171,8 @@ export function Sidebar({
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Avatar className="h-12 w-12">
-                      <AvatarImage src={otherUser?.image || undefined} />
-                      <AvatarFallback>
+                      <AvatarImage src={otherUser?.image || undefined} alt={otherUser?.name || "User"} />
+                      <AvatarFallback className="bg-primary/10 text-primary">
                         {getInitials(otherUser?.name || null)}
                       </AvatarFallback>
                     </Avatar>

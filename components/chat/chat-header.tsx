@@ -45,95 +45,85 @@ export function ChatHeader({ user, isOnline, isTyping, onVoiceCall, onVideoCall 
   };
 
   return (
-    <div className="h-14 md:h-16 border-b border-border bg-card px-2 md:px-4 flex items-center justify-between">
-      <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+    <div className="h-16 border-b border-border bg-card px-4 flex items-center justify-between">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
         {/* Mobile back button */}
         <Button
           variant="ghost"
           size="icon"
           onClick={() => router.push("/chat")}
-          className="md:hidden h-9 w-9 flex-shrink-0"
+          className="md:hidden flex-shrink-0"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         
-        <div className="relative flex-shrink-0">
-          <Avatar className="h-9 w-9 md:h-10 md:w-10">
-            <AvatarImage src={user.image || undefined} />
-            <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-          </Avatar>
-          {isOnline && (
-            <div className="absolute bottom-0 right-0 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full bg-green-500 border-2 border-card" />
-          )}
-        </div>
+        <Avatar className="h-10 w-10 flex-shrink-0">
+          <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
+          <AvatarFallback>
+            {getInitials(user.name)}
+          </AvatarFallback>
+        </Avatar>
+        
         <div className="min-w-0 flex-1">
-          <h2 className="font-semibold text-sm md:text-base truncate">{user.name || "Unknown User"}</h2>
-          <p className="text-xs text-muted-foreground truncate">
+          <h2 className="font-semibold text-base truncate">{user.name || "Unknown User"}</h2>
+          <p className="text-xs text-muted-foreground">
             {isTyping ? "typing..." : isOnline ? "online" : "offline"}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
+      <div className="flex items-center gap-2 flex-shrink-0">
         <Button
           variant="ghost"
           size="icon"
           onClick={onVoiceCall}
-          title="Voice call"
-          className="hover:bg-accent h-8 w-8 md:h-10 md:w-10"
         >
-          <Phone className="h-4 w-4 md:h-5 md:w-5" />
+          <Phone className="h-5 w-5" />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           onClick={onVideoCall}
-          title="Video call"
-          className="hover:bg-accent h-8 w-8 md:h-10 md:w-10"
         >
-          <Video className="h-4 w-4 md:h-5 md:w-5" />
+          <Video className="h-5 w-5" />
         </Button>
         
-        {/* More options menu */}
         <div className="relative">
           <Button 
             variant="ghost" 
-            size="icon" 
-            className="hover:bg-accent h-8 w-8 md:h-10 md:w-10"
+            size="icon"
             onClick={() => setShowMenu(!showMenu)}
           >
-            <MoreVertical className="h-4 w-4 md:h-5 md:w-5" />
+            <MoreVertical className="h-5 w-5" />
           </Button>
 
           <AnimatePresence>
             {showMenu && (
               <>
-                {/* Backdrop */}
                 <div 
                   className="fixed inset-0 z-40" 
                   onClick={() => setShowMenu(false)}
                 />
                 
-                {/* Menu */}
                 <motion.div
-                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                  className="absolute right-0 top-full mt-2 p-2 bg-popover border border-border rounded-xl shadow-2xl min-w-[200px] z-50"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute right-0 top-full mt-2 p-2 bg-popover border rounded-xl shadow-xl min-w-[200px] z-50"
                 >
                   <button
                     onClick={handleBlock}
-                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-accent rounded-lg transition-colors text-left text-destructive"
+                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-accent rounded-lg text-destructive"
                   >
                     <Ban className="h-4 w-4" />
-                    <span className="text-sm font-medium">Block User</span>
+                    <span className="text-sm">Block User</span>
                   </button>
                   <button
                     onClick={handleReport}
-                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-accent rounded-lg transition-colors text-left text-destructive"
+                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-accent rounded-lg text-destructive"
                   >
                     <Flag className="h-4 w-4" />
-                    <span className="text-sm font-medium">Report User</span>
+                    <span className="text-sm">Report User</span>
                   </button>
                 </motion.div>
               </>

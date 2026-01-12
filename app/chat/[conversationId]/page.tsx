@@ -173,7 +173,7 @@ export default function ConversationPage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col h-screen max-h-screen overflow-hidden">
+    <div className="flex flex-col h-screen">
       <ChatHeader 
         user={otherUser} 
         isOnline={true} 
@@ -182,10 +182,10 @@ export default function ConversationPage() {
         onVideoCall={handleVideoCall}
       />
 
-      <div className="flex-1 overflow-y-auto p-3 md:p-4 bg-background">
+      <div className="flex-1 overflow-y-auto p-4 bg-background">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <p className="text-sm md:text-base text-muted-foreground text-center px-4">
+            <p className="text-sm text-muted-foreground text-center">
               No messages yet. Start the conversation!
             </p>
           </div>
